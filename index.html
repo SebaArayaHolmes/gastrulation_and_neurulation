@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gastrulación y Neurulación · Guía didáctica</title>
+<style>
+  :root{
+    --bg:#0f1220;
+    --panel:#171b2e;
+    --panel2:#1e2338;
+    --accent:#7dd3fc;
+    --accent2:#f9a8d4;
+    --accent3:#a7f3d0;
+    --text:#e7e9f5;
+    --muted:#9aa0c0;
+    --ecto:#7dd3fc;
+    --meso:#f9a8d4;
+    --endo:#fcd34d;
+    --neural:#c4b5fd;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:'Segoe UI', system-ui, -apple-system, sans-serif;
+    background:radial-gradient(circle at 20% 0%, #1b2040, var(--bg) 60%);
+    color:var(--text);
+    line-height:1.6;
+  }
+  header{
+    padding:2.2rem 1.5rem 1.5rem;
+    text-align:center;
+    background:linear-gradient(135deg, #1a1f3a, #241a3a);
+    border-bottom:1px solid #2c3155;
+  }
+  header h1{
+    margin:0 0 .3rem;
+    font-size:2.1rem;
+    background:linear-gradient(90deg,var(--ecto),var(--meso),var(--endo));
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+  }
+  header p{color:var(--muted);max-width:640px;margin:.5rem auto 0;font-size:.95rem;}
+
+  nav{
+    position:sticky;top:0;z-index:50;
+    display:flex;flex-wrap:wrap;justify-content:center;gap:.5rem;
+    background:rgba(15,18,32,.92);
+    backdrop-filter:blur(6px);
+    padding:.7rem 1rem;
+    border-bottom:1px solid #2c3155;
+  }
+  nav button{
+    background:var(--panel2);
+    color:var(--text);
+    border:1px solid #33395c;
+    padding:.5rem 1rem;
+    border-radius:999px;
+    cursor:pointer;
+    font-size:.85rem;
+    transition:.2s;
+  }
+  nav button:hover{border-color:var(--accent);}
+  nav button.active{
+    background:linear-gradient(90deg,var(--accent),var(--accent2));
+    color:#0f1220;
+    font-weight:600;
+    border-color:transparent;
+  }
+
+  main{max-width:920px;margin:0 auto;padding:2rem 1.2rem 4rem;}
+
+  section{display:none;animation:fade .4s ease;}
+  section.active{display:block;}
+  @keyframes fade{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+
+  .card{
+    background:var(--panel);
+    border:1px solid #262b4a;
+    border-radius:14px;
+    padding:1.4rem 1.6rem;
+    margin-bottom:1.3rem;
+  }
+  .card h2{margin-top:0;color:var(--accent);font-size:1.3rem;border-bottom:1px solid #2c3155;padding-bottom:.5rem;}
+  .card h3{color:var(--accent2);font-size:1.05rem;margin-bottom:.4rem;}
+  .muted{color:var(--muted);font-size:.9rem;}
+
+  .badge{
+    display:inline-block;
+    font-size:.72rem;
+    font-weight:700;
+    padding:.15rem .55rem;
+    border-radius:999px;
+    margin-right:.4rem;
+    color:#0f1220;
+  }
+  .b-ecto{background:var(--ecto);}
+  .b-meso{background:var(--meso);}
+  .b-endo{background:var(--endo);}
+  .b-neural{background:var(--neural);}
+
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+  @media(max-width:680px){.grid2{grid-template-columns:1fr;}}
+
+  .stepper{list-style:none;padding:0;margin:0;counter-reset:step;}
+  .stepper li{
+    position:relative;
+    padding:.7rem 0 .7rem 2.6rem;
+    border-left:2px solid #2c3155;
+    margin-left:1rem;
+  }
+  .stepper li:last-child{border-left:2px solid transparent;}
+  .stepper li::before{
+    counter-increment:step;
+    content:counter(step);
+    position:absolute;left:-1.05rem;top:.5rem;
+    width:1.7rem;height:1.7rem;
+    border-radius:50%;
+    background:linear-gradient(135deg,var(--accent),var(--accent2));
+    color:#0f1220;font-weight:700;font-size:.85rem;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .stepper strong{color:#fff;}
+
+  .callout{
+    border-left:4px solid var(--accent3);
+    background:#12331f22;
+    padding:.8rem 1rem;
+    border-radius:6px;
+    margin:.9rem 0;
+    font-size:.92rem;
+  }
+  .callout.warn{border-left-color:#fbbf24;background:#3a2c0f33;}
+  .callout.clin{border-left-color:var(--accent2);background:#3a1f2c33;}
+
+  svg text{font-family:inherit;}
+  .diagram-wrap{
+    background:#0c0e1c;
+    border-radius:12px;
+    padding:1rem;
+    display:flex;justify-content:center;
+    margin:1rem 0;
+    overflow-x:auto;
+  }
+
+  table{width:100%;border-collapse:collapse;font-size:.88rem;margin:.6rem 0;}
+  th,td{border:1px solid #2c3155;padding:.5rem .6rem;text-align:left;}
+  th{background:#1e2338;color:var(--accent);}
+  tr:nth-child(even){background:#1a1e35;}
+
+  .tabs{display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:.8rem;}
+  .tab-btn{
+    background:#1e2338;border:1px solid #2c3155;color:var(--muted);
+    padding:.4rem .8rem;border-radius:8px;cursor:pointer;font-size:.82rem;
+  }
+  .tab-btn.active{background:var(--panel2);color:var(--accent);border-color:var(--accent);}
+  .tab-panel{display:none;}
+  .tab-panel.active{display:block;}
+
+  .quiz-q{margin-bottom:1.1rem;}
+  .quiz-opts{display:flex;flex-direction:column;gap:.4rem;margin-top:.4rem;}
+  .quiz-opts label{
+    background:#1e2338;padding:.5rem .7rem;border-radius:8px;cursor:pointer;
+    border:1px solid #2c3155;font-size:.88rem;
+  }
+  .quiz-opts input{margin-right:.5rem;}
+  .quiz-feedback{margin-top:.4rem;font-size:.85rem;font-weight:600;display:none;}
+  .quiz-feedback.ok{color:#4ade80;}
+  .quiz-feedback.bad{color:#f87171;}
+  button.check{
+    margin-top:.6rem;background:var(--accent);border:none;color:#0f1220;
+    font-weight:700;padding:.5rem 1rem;border-radius:8px;cursor:pointer;
+  }
+
+  .progress-track{
+    height:6px;background:#1e2338;border-radius:3px;overflow:hidden;margin-bottom:1.5rem;
+  }
+  .progress-fill{
+    height:100%;background:linear-gradient(90deg,var(--ecto),var(--meso),var(--endo));
+    width:16%;transition:width .3s;
+  }
+
+  footer{text-align:center;color:var(--muted);font-size:.8rem;padding:2rem 1rem;}
+
+  .glossary dt{color:var(--accent);font-weight:700;margin-top:.6rem;}
+  .glossary dd{margin-left:0;color:var(--text);}
+
+  .prevnext{display:flex;justify-content:space-between;margin-top:1.5rem;}
+  .prevnext button{
+    background:var(--panel2);border:1px solid #33395c;color:var(--text);
+    padding:.55rem 1.1rem;border-radius:8px;cursor:pointer;
+  }
+  .prevnext button:hover{border-color:var(--accent);}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>🧬 Gastrulación y Neurulación</h1>
+  <p>Guía interactiva para comprender, paso a paso, cómo un embrión bilaminar se transforma en un embrión trilaminar con un sistema nervioso primitivo — sin saltarse ningún detalle clave.</p>
+</header>
+
+<nav id="nav"></nav>
+
+<main>
+  <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+
+  <!-- 1. INTRO -->
+  <section data-name="Introducción" class="active">
+    <div class="card">
+      <h2>¿Por qué importan estos dos procesos?</h2>
+      <p>Entre la 3ª y la 4ª semana del desarrollo humano ocurren dos eventos que definen la arquitectura de todo el cuerpo:</p>
+      <div class="stepper">
+        <li><strong>Gastrulación</strong> (día 14–21 aprox.): el disco embrionario bilaminar (epiblasto + hipoblasto) se convierte en un disco <em>trilaminar</em>, generando las tres capas germinales: <span class="badge b-ecto">ectodermo</span> <span class="badge b-meso">mesodermo</span> <span class="badge b-endo">endodermo</span>.</li>
+        <li><strong>Neurulación</strong> (día 18–28 aprox.): parte del ectodermo (el <em>neuroectodermo</em>) se engrosa, se pliega y se cierra sobre sí mismo formando el <span class="badge b-neural">tubo neural</span>, precursor de todo el sistema nervioso central.</li>
+      </div>
+      <div class="callout">
+        <strong>Idea central:</strong> la gastrulación establece los <em>ejes corporales</em> (cráneo-caudal, dorso-ventral, derecha-izquierda) y las tres capas germinales; la neurulación usa esos ejes para construir el eje neural. Un fallo en cualquiera de los dos procesos produce malformaciones congénitas graves y frecuentes en exámenes.
+      </div>
+      <p class="muted">Usa el menú superior para navegar. Cada sección incluye diagramas, tablas resumen, correlatos clínicos y un quiz final para autoevaluarte.</p>
+    </div>
+  </section>
+
+  <!-- 2. GASTRULACION -->
+  <section data-name="Gastrulación">
+    <div class="card">
+      <h2>1. Formación de la línea primitiva</h2>
+      <p>Todo comienza en el <strong>epiblasto</strong> (la capa dorsal del disco bilaminar). Al inicio de la 3ª semana aparece un engrosamiento de células epiblásticas en la línea media, en el extremo caudal del disco: la <strong>línea primitiva</strong>.</p>
+      <div class="stepper">
+        <li>La línea primitiva se alarga en sentido caudo-craneal por proliferación celular.</li>
+        <li>En su extremo craneal se forma el <strong>nódulo primitivo (nódulo de Hensen)</strong>, que rodea a la <strong>fosita primitiva</strong>.</li>
+        <li>A lo largo de la línea aparece el <strong>surco primitivo</strong>, con una elevación a cada lado (los pliegues primitivos).</li>
+      </div>
+      <div class="callout">
+        <strong>Por qué importa:</strong> la línea primitiva define el eje <em>cráneo-caudal</em> y el eje <em>derecha-izquierda</em> del embrión, y es la vía de entrada de las células que migrarán para formar las nuevas capas.
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>2. Ingresión y migración celular (el corazón de la gastrulación)</h2>
+      <p>Las células epiblásticas cercanas a la línea primitiva cambian de forma (transición epitelio-mesénquima), se invaginan a través del surco primitivo y se deslizan entre el epiblasto y el hipoblasto. Este movimiento se llama <strong>ingresión</strong>.</p>
+      <div class="diagram-wrap">
+        <svg width="620" height="260" viewBox="0 0 620 260">
+          <!-- epiblasto -->
+          <path d="M40,80 Q310,40 580,80" stroke="#7dd3fc" stroke-width="6" fill="none"/>
+          <text x="300" y="30" fill="#7dd3fc" font-size="13" text-anchor="middle">Epiblasto</text>
+          <!-- hipoblasto -->
+          <path d="M40,150 Q310,190 580,150" stroke="#fcd34d" stroke-width="6" fill="none"/>
+          <text x="300" y="230" fill="#fcd34d" font-size="13" text-anchor="middle">Hipoblasto</text>
+          <!-- linea primitiva -->
+          <line x1="300" y1="83" x2="300" y2="147" stroke="#f9a8d4" stroke-width="4"/>
+          <text x="330" y="70" fill="#f9a8d4" font-size="12">Surco primitivo</text>
+          <!-- flechas migracion -->
+          <path d="M300,90 C260,110 200,120 160,118" stroke="#e7e9f5" stroke-width="2" fill="none" marker-end="url(#arrow)"/>
+          <path d="M300,90 C340,110 400,120 440,118" stroke="#e7e9f5" stroke-width="2" fill="none" marker-end="url(#arrow)"/>
+          <path d="M300,90 L300,140" stroke="#e7e9f5" stroke-width="2" fill="none" marker-end="url(#arrow)"/>
+          <text x="150" y="105" fill="#e7e9f5" font-size="11">Migración lateral</text>
+          <defs>
+            <marker id="arrow" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto">
+              <path d="M0,0 L8,4 L0,8 z" fill="#e7e9f5"/>
+            </marker>
+          </defs>
+          <text x="300" y="255" fill="#9aa0c0" font-size="11" text-anchor="middle">Corte transversal esquemático de la ingresión celular</text>
+        </svg>
+      </div>
+      <table>
+        <tr><th>Destino de la célula</th><th>¿Qué hace?</th><th>Capa resultante</th></tr>
+        <tr><td>Se desplaza y reemplaza al hipoblasto</td><td>Migra ventralmente y desplaza a las células del hipoblasto</td><td><span class="badge b-endo">Endodermo</span> embrionario</td></tr>
+        <tr><td>Se ubica entre epiblasto e hipoblasto</td><td>Migra lateralmente formando una capa intermedia</td><td><span class="badge b-meso">Mesodermo</span> intraembrionario</td></tr>
+        <tr><td>Permanece en superficie</td><td>Las células que no migran quedan como capa dorsal</td><td><span class="badge b-ecto">Ectodermo</span></td></tr>
+      </table>
+      <div class="callout warn">
+        <strong>Detalle que se suele olvidar:</strong> el hipoblasto original <em>no</em> forma el endodermo definitivo del embrión; es reemplazado casi por completo por células provenientes del epiblasto a través de la línea primitiva.
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>3. El nódulo primitivo y la notocorda</h2>
+      <p>Las células que ingresan a través de la <strong>fosita primitiva</strong> (en el nódulo de Hensen) migran cranealmente en la línea media, formando el <strong>proceso notocordal</strong>, un cordón celular macizo entre ectodermo y endodermo.</p>
+      <div class="stepper">
+        <li>El proceso notocordal se canaliza (canal notocordal) y luego se aplana contra el endodermo, formando temporalmente la <strong>placa notocordal</strong>.</li>
+        <li>La placa notocordal se pliega y se separa del endodermo, dando lugar a la <strong>notocorda definitiva</strong>: un cordón sólido a lo largo de la línea media.</li>
+        <li>La notocorda es un centro señalizador clave: induce al ectodermo suprayacente a diferenciarse en <strong>neuroectodermo</strong> (esto es la <em>inducción neural</em>, el puente hacia la neurulación).</li>
+      </div>
+      <div class="callout">
+        <strong>Conexión clave:</strong> sin notocorda no hay señal inductora suficiente para el desarrollo normal del tubo neural. La notocorda también da origen, más adelante, al núcleo pulposo de los discos intervertebrales.
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>4. Membrana bucofaríngea, alantoides y membrana cloacal</h2>
+      <div class="grid2">
+        <div>
+          <h3>Extremo craneal</h3>
+          <p>Por delante del nódulo, ecto y endodermo permanecen fusionados (sin mesodermo interpuesto), formando la <strong>membrana bucofaríngea</strong> (futura boca).</p>
+        </div>
+        <div>
+          <h3>Extremo caudal</h3>
+          <p>Detrás de la línea primitiva se forma la <strong>membrana cloacal</strong> (futuro ano) y de allí crece el <strong>alantoides</strong> hacia el pedículo de fijación.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>5. Destino de las tres capas germinales</h2>
+      <div class="tabs" id="tabsGerm">
+        <button class="tab-btn active" data-tab="ecto">Ectodermo</button>
+        <button class="tab-btn" data-tab="meso">Mesodermo</button>
+        <button class="tab-btn" data-tab="endo">Endodermo</button>
+      </div>
+      <div class="tab-panel active" data-panel="ecto">
+        <p><span class="badge b-ecto">Ectodermo</span> da origen a: sistema nervioso central y periférico (vía neuroectodermo), epidermis, anexos cutáneos (pelo, uñas, glándulas), cristalino, oído interno, esmalte dental, y las <strong>células de la cresta neural</strong> (melanocitos, ganglios sensitivos, médula suprarrenal, cartílago y hueso craneofacial, entre otros).</p>
+      </div>
+      <div class="tab-panel" data-panel="meso">
+        <p><span class="badge b-meso">Mesodermo</span> se organiza en columnas paralelas a la notocorda y da origen a: mesodermo paraxial (somitas → músculo esquelético, dermis dorsal, vértebras), mesodermo intermedio (sistema urogenital), y mesodermo lateral (dermatoma/miotoma de pared corporal, sistema cardiovascular, células sanguíneas, cavidades corporales, bazo, corteza suprarrenal).</p>
+      </div>
+      <div class="tab-panel" data-panel="endo">
+        <p><span class="badge b-endo">Endodermo</span> forma el revestimiento epitelial del tubo digestivo y sus glándulas anexas (hígado, páncreas), el epitelio respiratorio, vejiga y uretra, y partes del oído medio y tiroides.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. NEURULACION -->
+  <section data-name="Neurulación">
+    <div class="card">
+      <h2>1. Inducción neural: el punto de partida</h2>
+      <p>La notocorda y el mesodermo paraxial subyacente liberan señales (p. ej. inhibición de BMP4 mediada por noggin, cordina y folistatina) que instruyen al ectodermo suprayacente en la línea media a convertirse en <strong>neuroectodermo</strong> en lugar de epidermis.</p>
+      <div class="callout">
+        Este engrosamiento del ectodermo se llama <strong>placa neural</strong> y aparece alrededor del día 18, con forma de "zapatilla", más ancha en el extremo craneal (futuro encéfalo) y estrecha caudalmente (futura médula espinal).
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>2. Neurulación primaria: plegamiento y cierre del tubo neural</h2>
+      <div class="diagram-wrap">
+        <svg width="640" height="220" viewBox="0 0 640 220">
+          <!-- 4 etapas del cierre -->
+          <g transform="translate(20,20)">
+            <text x="60" y="0" fill="#9aa0c0" font-size="11" text-anchor="middle">Placa neural</text>
+            <path d="M10,60 Q60,20 110,60" stroke="#c4b5fd" stroke-width="5" fill="none"/>
+            <path d="M10,60 Q60,90 110,60" stroke="#7dd3fc" stroke-width="4" fill="none"/>
+          </g>
+          <g transform="translate(180,20)">
+            <text x="60" y="0" fill="#9aa0c0" font-size="11" text-anchor="middle">Surco neural</text>
+            <path d="M10,55 Q35,15 60,55 Q85,15 110,55" stroke="#c4b5fd" stroke-width="5" fill="none"/>
+            <path d="M10,55 Q60,90 110,55" stroke="#7dd3fc" stroke-width="4" fill="none"/>
+          </g>
+          <g transform="translate(340,20)">
+            <text x="60" y="0" fill="#9aa0c0" font-size="11" text-anchor="middle">Pliegues neurales</text>
+            <path d="M15,55 C5,25 30,5 55,25 C60,10 65,10 70,25 C90,5 115,25 105,55" stroke="#c4b5fd" stroke-width="5" fill="none"/>
+            <path d="M15,55 Q60,90 105,55" stroke="#7dd3fc" stroke-width="4" fill="none"/>
+          </g>
+          <g transform="translate(500,20)">
+            <text x="60" y="0" fill="#9aa0c0" font-size="11" text-anchor="middle">Tubo neural cerrado</text>
+            <circle cx="60" cy="45" r="26" fill="none" stroke="#c4b5fd" stroke-width="5"/>
+            <path d="M15,70 Q60,100 105,70" stroke="#7dd3fc" stroke-width="4" fill="none"/>
+          </g>
+        </svg>
+      </div>
+      <div class="stepper">
+        <li>La placa neural se <strong>invagina</strong> en la línea media formando el <strong>surco neural</strong>, flanqueado por dos <strong>pliegues neurales</strong> que se elevan.</li>
+        <li>Los pliegues neurales se aproximan y se fusionan en la línea dorsal media, formando el <strong>tubo neural</strong>, que queda separado del ectodermo superficial (futura epidermis).</li>
+        <li>Las células situadas en el borde de unión entre neuroectodermo y ectodermo superficial se desprenden y forman la <strong>cresta neural</strong>, una población migratoria clave.</li>
+        <li>El cierre <strong>no es simultáneo</strong> en toda su longitud: comienza en la región cervical (aprox. somitas 4-6) y avanza en dirección craneal y caudal, como un "cierre de cremallera" bidireccional.</li>
+        <li>Quedan dos aberturas transitorias: el <strong>neuroporo craneal (rostral)</strong>, que cierra ~día 25, y el <strong>neuroporo caudal</strong>, que cierra ~día 27-28.</li>
+      </div>
+      <div class="callout warn">
+        <strong>Detalle clínico crítico:</strong> el cierre incompleto de estos neuroporos es la base embriológica de los defectos del tubo neural.
+        <ul style="margin:.4rem 0 0 1rem;padding:0;">
+          <li><strong>Neuroporo craneal</strong> no cerrado → <em>anencefalia</em>.</li>
+          <li><strong>Neuroporo caudal</strong> no cerrado → <em>espina bífida</em> (mielomeningocele, en sus formas más graves).</li>
+        </ul>
+        El ácido fólico periconcepcional reduce significativamente el riesgo de estos defectos.
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>3. Neurulación secundaria (región caudal / sacrococcígea)</h2>
+      <p>Caudal al neuroporo posterior, el tubo neural <strong>no</strong> se forma por plegamiento de una placa plana, sino por un mecanismo distinto llamado <strong>neurulación secundaria</strong>:</p>
+      <div class="stepper">
+        <li>Una masa de células mesenquimales derivadas de la <strong>eminencia caudal</strong> (remanente de la línea primitiva) se condensa en un cordón celular macizo: el <strong>cordón neural secundario</strong>.</li>
+        <li>Este cordón sufre <strong>cavitación</strong> (aparecen espacios internos que confluyen) y se convierte en un tubo hueco.</li>
+        <li>Este tubo se continúa y fusiona con el tubo neural formado por neurulación primaria, dando origen a la porción más caudal de la médula espinal (sacra y coccígea).</li>
+      </div>
+      <div class="callout">
+        <strong>Por qué se olvida este punto:</strong> muchos resúmenes solo describen el plegamiento clásico (neurulación primaria) y omiten que la médula espinal caudal se forma por un proceso mecánicamente distinto. Alteraciones aquí se asocian a defectos como el <em>síndrome de regresión caudal</em>.
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>4. La cresta neural: la "cuarta capa germinal"</h2>
+      <p>Se le llama así porque, aunque deriva del ectodermo, sus células migran extensamente por todo el embrión y generan derivados tan diversos como el mesénquima. Es fundamental no confundirla con el tubo neural mismo.</p>
+      <table>
+        <tr><th>Región de origen</th><th>Derivados principales</th></tr>
+        <tr><td>Cresta neural craneal</td><td>Cartílago y hueso craneofacial, dentina, melanocitos, nervios craneales (parte sensitiva)</td></tr>
+        <tr><td>Cresta neural del tronco</td><td>Ganglios de la raíz dorsal, médula suprarrenal, melanocitos, ganglios simpáticos</td></tr>
+        <tr><td>Cresta neural vagal y sacra</td><td>Ganglios parasimpáticos, sistema nervioso entérico (plexos de Meissner y Auerbach)</td></tr>
+        <tr><td>Cresta neural cardíaca</td><td>Tabique aorticopulmonar, músculo liso de grandes vasos</td></tr>
+      </table>
+      <div class="callout clin">
+        <strong>Correlato clínico:</strong> defectos en la migración de la cresta neural entérica producen la <em>enfermedad de Hirschsprung</em> (megacolon agangliónico).
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>5. Del tubo neural al sistema nervioso maduro (vista rápida)</h2>
+      <p>Una vez cerrado, el tubo neural se subdivide craneocaudalmente en vesículas encefálicas y médula espinal:</p>
+      <table>
+        <tr><th>Región del tubo</th><th>Da origen a</th></tr>
+        <tr><td>Prosencéfalo</td><td>Telencéfalo y diencéfalo</td></tr>
+        <tr><td>Mesencéfalo</td><td>Mesencéfalo (se mantiene)</td></tr>
+        <tr><td>Rombencéfalo</td><td>Metencéfalo (protuberancia, cerebelo) y mielencéfalo (bulbo raquídeo)</td></tr>
+        <tr><td>Resto caudal del tubo</td><td>Médula espinal</td></tr>
+      </table>
+      <p class="muted">Este tema se desarrolla en profundidad en la organogénesis del sistema nervioso; aquí solo se ubica como continuación directa de la neurulación.</p>
+    </div>
+  </section>
+
+  <!-- 4. LINEA DE TIEMPO -->
+  <section data-name="Línea de tiempo">
+    <div class="card">
+      <h2>Cronología integrada (días post-fecundación aprox.)</h2>
+      <table>
+        <tr><th>Día</th><th>Evento</th></tr>
+        <tr><td>14-15</td><td>Aparece la línea primitiva en el epiblasto</td></tr>
+        <tr><td>16</td><td>Ingresión celular activa; formación de meso y endodermo intraembrionarios</td></tr>
+        <tr><td>16-18</td><td>Formación del proceso y la placa notocordal</td></tr>
+        <tr><td>18</td><td>Inducción neural: aparece la placa neural</td></tr>
+        <tr><td>18-20</td><td>Notocorda definitiva completamente formada</td></tr>
+        <tr><td>20-21</td><td>Surco y pliegues neurales; comienza el cierre del tubo neural (región cervical)</td></tr>
+        <tr><td>22-23</td><td>Cierre progresivo craneal y caudal; migración de cresta neural</td></tr>
+        <tr><td>25</td><td>Cierre del neuroporo craneal</td></tr>
+        <tr><td>27-28</td><td>Cierre del neuroporo caudal → fin de la neurulación primaria</td></tr>
+        <tr><td>28 en adelante</td><td>Neurulación secundaria continúa en la región sacrococcígea</td></tr>
+      </table>
+      <div class="callout">Esta cronología es aproximada y puede variar levemente entre fuentes/embriones; lo importante para el examen suele ser el <em>orden relativo</em> de los eventos, más que el día exacto.</div>
+    </div>
+  </section>
+
+  <!-- 5. GLOSARIO -->
+  <section data-name="Glosario">
+    <div class="card">
+      <h2>Glosario rápido</h2>
+      <dl class="glossary">
+        <dt>Epiblasto</dt><dd>Capa dorsal del disco bilaminar; fuente de todas las células embrionarias definitivas.</dd>
+        <dt>Hipoblasto</dt><dd>Capa ventral del disco bilaminar; será mayormente reemplazado por el endodermo definitivo.</dd>
+        <dt>Línea primitiva</dt><dd>Engrosamiento del epiblasto que marca el eje cráneo-caudal e inicia la gastrulación.</dd>
+        <dt>Ingresión</dt><dd>Migración de células epiblásticas a través de la línea primitiva hacia el interior del disco.</dd>
+        <dt>Nódulo de Hensen</dt><dd>Extremo craneal engrosado de la línea primitiva; organizador embrionario.</dd>
+        <dt>Notocorda</dt><dd>Cordón mesodérmico axial; principal inductor de la placa neural.</dd>
+        <dt>Inducción neural</dt><dd>Proceso por el cual la notocorda instruye al ectodermo suprayacente a formar neuroectodermo.</dd>
+        <dt>Placa neural</dt><dd>Engrosamiento del ectodermo en la línea media, precursor del tubo neural.</dd>
+        <dt>Neurulación primaria</dt><dd>Plegamiento y fusión de la placa neural para formar el tubo neural (mayor parte del SNC).</dd>
+        <dt>Neurulación secundaria</dt><dd>Cavitación de un cordón celular macizo para formar la porción más caudal del tubo neural.</dd>
+        <dt>Cresta neural</dt><dd>Población celular migratoria originada en el borde de los pliegues neurales; da origen a estructuras muy diversas.</dd>
+        <dt>Neuroporo craneal/caudal</dt><dd>Últimas aberturas del tubo neural en cerrarse; su falla causa defectos del tubo neural.</dd>
+      </dl>
+    </div>
+  </section>
+
+  <!-- 6. QUIZ -->
+  <section data-name="Autoevaluación">
+    <div class="card">
+      <h2>Pon a prueba lo aprendido</h2>
+      <p class="muted">Selecciona una opción por pregunta y presiona "Revisar respuestas".</p>
+
+      <div class="quiz-q" data-answer="b">
+        <strong>1. ¿Qué estructura induce la formación de la placa neural?</strong>
+        <div class="quiz-opts">
+          <label><input type="radio" name="q1" value="a"> El hipoblasto</label>
+          <label><input type="radio" name="q1" value="b"> La notocorda</label>
+          <label><input type="radio" name="q1" value="c"> La membrana cloacal</label>
+          <label><input type="radio" name="q1" value="d"> El alantoides</label>
+        </div>
+        <div class="quiz-feedback"></div>
+      </div>
+
+      <div class="quiz-q" data-answer="c">
+        <strong>2. Un neuroporo caudal que no cierra correctamente se asocia clínicamente a:</strong>
+        <div class="quiz-opts">
+          <label><input type="radio" name="q2" value="a"> Anencefalia</label>
+          <label><input type="radio" name="q2" value="b"> Enfermedad de Hirschsprung</label>
+          <label><input type="radio" name="q2" value="c"> Espina bífida</label>
+          <label><input type="radio" name="q2" value="d"> Síndrome de Down</label>
+        </div>
+        <div class="quiz-feedback"></div>
+      </div>
+
+      <div class="quiz-q" data-answer="a">
+        <strong>3. La médula espinal en su porción más caudal (sacrococcígea) se forma por:</strong>
+        <div class="quiz-opts">
+          <label><input type="radio" name="q3" value="a"> Neurulación secundaria (cavitación de un cordón celular)</label>
+          <label><input type="radio" name="q3" value="b"> Plegamiento directo de la placa neural</label>
+          <label><input type="radio" name="q3" value="c"> Migración del hipoblasto</label>
+          <label><input type="radio" name="q3" value="d"> Ingresión a través de la fosita primitiva</label>
+        </div>
+        <div class="quiz-feedback"></div>
+      </div>
+
+      <div class="quiz-q" data-answer="d">
+        <strong>4. La cresta neural NO da origen a:</strong>
+        <div class="quiz-opts">
+          <label><input type="radio" name="q4" value="a"> Médula suprarrenal</label>
+          <label><input type="radio" name="q4" value="b"> Melanocitos</label>
+          <label><input type="radio" name="q4" value="c"> Ganglios sensitivos de la raíz dorsal</label>
+          <label><input type="radio" name="q4" value="d"> Epitelio del tubo digestivo</label>
+        </div>
+        <div class="quiz-feedback"></div>
+      </div>
+
+      <div class="quiz-q" data-answer="b">
+        <strong>5. Las células que ingresan a través de la línea primitiva y se ubican entre epiblasto e hipoblasto forman:</strong>
+        <div class="quiz-opts">
+          <label><input type="radio" name="q5" value="a"> Ectodermo</label>
+          <label><input type="radio" name="q5" value="b"> Mesodermo intraembrionario</label>
+          <label><input type="radio" name="q5" value="c"> Endodermo definitivo</label>
+          <label><input type="radio" name="q5" value="d"> Cresta neural</label>
+        </div>
+        <div class="quiz-feedback"></div>
+      </div>
+
+      <button class="check" onclick="checkQuiz()">Revisar respuestas</button>
+      <p id="quizScore" style="margin-top:.8rem;font-weight:700;"></p>
+    </div>
+  </section>
+
+  <div class="prevnext">
+    <button id="prevBtn" onclick="go(-1)">← Anterior</button>
+    <button id="nextBtn" onclick="go(1)">Siguiente →</button>
+  </div>
+</main>
+
+<footer>Guía de estudio generada como material de apoyo · Embriología humana temprana</footer>
+
+<script>
+  const sections = document.querySelectorAll('main > section');
+  const navEl = document.getElementById('nav');
+  const progressFill = document.getElementById('progressFill');
+  let current = 0;
+
+  sections.forEach((s,i)=>{
+    const btn = document.createElement('button');
+    btn.textContent = s.dataset.name;
+    btn.onclick = ()=> setSection(i);
+    navEl.appendChild(btn);
+  });
+
+  function setSection(i){
+    current = i;
+    sections.forEach((s,idx)=>s.classList.toggle('active', idx===i));
+    navEl.querySelectorAll('button').forEach((b,idx)=>b.classList.toggle('active', idx===i));
+    progressFill.style.width = ((i+1)/sections.length*100)+'%';
+    document.getElementById('prevBtn').disabled = i===0;
+    document.getElementById('nextBtn').disabled = i===sections.length-1;
+    window.scrollTo({top:0, behavior:'smooth'});
+  }
+  function go(delta){
+    const next = current+delta;
+    if(next>=0 && next<sections.length) setSection(next);
+  }
+  setSection(0);
+
+  // Tabs (capas germinales)
+  document.querySelectorAll('#tabsGerm .tab-btn').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      document.querySelectorAll('#tabsGerm .tab-btn').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      const target = btn.dataset.tab;
+      document.querySelectorAll('.tab-panel').forEach(p=>{
+        p.classList.toggle('active', p.dataset.panel===target);
+      });
+    });
+  });
+
+  // Quiz
+  function checkQuiz(){
+    let score = 0;
+    const questions = document.querySelectorAll('.quiz-q');
+    questions.forEach(q=>{
+      const answer = q.dataset.answer;
+      const selected = q.querySelector('input[type=radio]:checked');
+      const fb = q.querySelector('.quiz-feedback');
+      fb.style.display='block';
+      if(selected && selected.value === answer){
+        fb.textContent = '✔ Correcto';
+        fb.className = 'quiz-feedback ok';
+        score++;
+      } else if (selected) {
+        fb.textContent = '✘ Incorrecto — revisa la sección correspondiente.';
+        fb.className = 'quiz-feedback bad';
+      } else {
+        fb.textContent = '⚠ No respondiste esta pregunta.';
+        fb.className = 'quiz-feedback bad';
+      }
+    });
+    document.getElementById('quizScore').textContent = `Puntaje: ${score} / ${questions.length}`;
+  }
+</script>
+
+</body>
+</html>
